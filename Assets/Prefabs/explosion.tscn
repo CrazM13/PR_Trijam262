@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://btjd3hjch08in"]
+
+[ext_resource type="Texture2D" uid="uid://deq5gwqk5h6rb" path="res://icon.svg" id="1_rj3e3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rukcg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_rj3e3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Explosion" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_rukcg")

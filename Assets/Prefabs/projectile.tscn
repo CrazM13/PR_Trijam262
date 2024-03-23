@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3 uid="uid://burq2bjbv1ta6"]
+
+[ext_resource type="Script" path="res://Scripts/Projectile.cs" id="1_8lbbb"]
+[ext_resource type="Texture2D" uid="uid://deq5gwqk5h6rb" path="res://icon.svg" id="1_wcgy2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hbcjn"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fo3or"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_wcgy2")
+}],
+"loop": true,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_wcgy2")
+}],
+"loop": true,
+"name": &"inert",
+"speed": 5.0
+}]
+
+[node name="Projectile" type="AnimatableBody2D" node_paths=PackedStringArray("sprite")]
+collision_layer = 4
+collision_mask = 10
+sync_to_physics = false
+script = ExtResource("1_8lbbb")
+speed = 300.0
+inertModifier = 0.5
+sprite = NodePath("AnimatedSprite2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_hbcjn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fo3or")
+animation = &"inert"

@@ -1,0 +1,138 @@
+[gd_scene load_steps=21 format=3 uid="uid://r01lm7je50vb"]
+
+[ext_resource type="Script" path="res://Scripts/Player.cs" id="1_gs8sg"]
+[ext_resource type="Texture2D" uid="uid://deq5gwqk5h6rb" path="res://icon.svg" id="1_t3csp"]
+[ext_resource type="Script" path="res://Scripts/ProjectilePool.cs" id="3_vgq6s"]
+[ext_resource type="PackedScene" uid="uid://burq2bjbv1ta6" path="res://Assets/Prefabs/projectile.tscn" id="4_ofstw"]
+[ext_resource type="PackedScene" uid="uid://cgs43sj0jst55" path="res://Assets/Prefabs/scene_transition.tscn" id="5_8poye"]
+[ext_resource type="Script" path="res://Scripts/EnemyManager.cs" id="6_328m8"]
+[ext_resource type="Script" path="res://Scripts/Enemy.cs" id="7_y3u28"]
+[ext_resource type="PackedScene" uid="uid://btjd3hjch08in" path="res://Assets/Prefabs/explosion.tscn" id="8_cx14v"]
+[ext_resource type="Script" path="res://Scripts/AudioManager.cs" id="9_m5nt1"]
+[ext_resource type="PackedScene" uid="uid://dia06r61losqp" path="res://Assets/Prefabs/global_audio.tscn" id="10_4qkgr"]
+[ext_resource type="AudioStream" uid="uid://f6vamvmmwhv0" path="res://Assets/Audio/Bounce.wav" id="10_5nqxy"]
+[ext_resource type="PackedScene" uid="uid://bc1v4rsk6d8q3" path="res://Assets/Prefabs/local_audio.tscn" id="11_6efe2"]
+[ext_resource type="AudioStream" uid="uid://c2bog2gexe842" path="res://Assets/Audio/EnemyDeath.wav" id="11_twiub"]
+[ext_resource type="AudioStream" uid="uid://dgy0ce58vk681" path="res://Assets/Audio/PlayerDeath.wav" id="12_b1mbx"]
+[ext_resource type="AudioStream" uid="uid://bvsp82l7xd4d2" path="res://Assets/Audio/Shoot.wav" id="13_uc72c"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kvwrh"]
+size = Vector2(2000, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2tktp"]
+size = Vector2(20, 1000)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5c2aj"]
+size = Vector2(100, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yeiyl"]
+size = Vector2(100, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2dx65"]
+size = Vector2(20, 100)
+
+[node name="GameScene" type="Node2D"]
+
+[node name="Background" type="ColorRect" parent="."]
+offset_left = -1417.0
+offset_top = -1805.0
+offset_right = 2631.0
+offset_bottom = 2243.0
+color = Color(0, 0, 0, 1)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(470, 9)
+shape = SubResource("RectangleShape2D_kvwrh")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(470, 638)
+shape = SubResource("RectangleShape2D_kvwrh")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(10, 291)
+shape = SubResource("RectangleShape2D_2tktp")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(1142, 291)
+shape = SubResource("RectangleShape2D_2tktp")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." node_paths=PackedStringArray("sceneManager", "explosionPool", "tankBase", "tankGun", "ammo")]
+position = Vector2(360, 227)
+collision_mask = 10
+script = ExtResource("1_gs8sg")
+sceneManager = NodePath("../SceneTransition")
+explosionPool = NodePath("../ExplosionPool")
+tankBase = NodePath("Sprite2D")
+tankGun = NodePath("Sprite2D2")
+ammo = NodePath("Ammo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_5c2aj")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+texture = ExtResource("1_t3csp")
+
+[node name="Sprite2D2" type="Sprite2D" parent="CharacterBody2D"]
+texture = ExtResource("1_t3csp")
+
+[node name="Ammo" type="Node" parent="CharacterBody2D"]
+script = ExtResource("3_vgq6s")
+projectilePrefab = ExtResource("4_ofstw")
+maxObjects = 100
+
+[node name="SceneTransition" parent="." instance=ExtResource("5_8poye")]
+
+[node name="EnemyManager" type="Node" parent="." node_paths=PackedStringArray("Target", "sceneManager", "explosionPool")]
+script = ExtResource("6_328m8")
+Target = NodePath("../CharacterBody2D")
+sceneManager = NodePath("../SceneTransition")
+explosionPool = NodePath("../ExplosionPool")
+
+[node name="Enemy" type="CharacterBody2D" parent="EnemyManager" node_paths=PackedStringArray("shield", "sprite")]
+position = Vector2(792, 161)
+collision_mask = 2
+script = ExtResource("7_y3u28")
+shield = NodePath("AnimatableBody2D")
+sprite = NodePath("Sprite2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyManager/Enemy"]
+shape = SubResource("RectangleShape2D_yeiyl")
+
+[node name="Sprite2D" type="Sprite2D" parent="EnemyManager/Enemy"]
+texture = ExtResource("1_t3csp")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="EnemyManager/Enemy"]
+collision_layer = 8
+collision_mask = 5
+sync_to_physics = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyManager/Enemy/AnimatableBody2D"]
+position = Vector2(65, 0)
+shape = SubResource("RectangleShape2D_2dx65")
+
+[node name="Sprite2D" type="Sprite2D" parent="EnemyManager/Enemy/AnimatableBody2D/CollisionShape2D"]
+texture = ExtResource("1_t3csp")
+
+[node name="ExplosionPool" type="Node" parent="."]
+script = ExtResource("3_vgq6s")
+projectilePrefab = ExtResource("8_cx14v")
+
+[node name="AudioManager" type="Node" parent="." node_paths=PackedStringArray("globalAudioPlayers", "localAudioPlayers")]
+script = ExtResource("9_m5nt1")
+audioStreams = Array[AudioStream]([ExtResource("10_5nqxy"), ExtResource("11_twiub"), ExtResource("12_b1mbx"), ExtResource("13_uc72c")])
+globalAudioPlayers = NodePath("GlobalAudioPool")
+localAudioPlayers = NodePath("LocalAudioPool")
+
+[node name="GlobalAudioPool" type="Node" parent="AudioManager"]
+script = ExtResource("3_vgq6s")
+projectilePrefab = ExtResource("10_4qkgr")
+maxObjects = 20
+
+[node name="LocalAudioPool" type="Node" parent="AudioManager"]
+script = ExtResource("3_vgq6s")
+projectilePrefab = ExtResource("11_6efe2")
+maxObjects = 20
