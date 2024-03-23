@@ -83,6 +83,7 @@ public partial class Player : Damageable {
 		}
 		explosionPool.AddChild(newExplosion);
 		newExplosion.GlobalPosition = GlobalPosition;
+		((AnimatedSprite2D) newExplosion).SpeedScale = 1f / (float) Engine.TimeScale;
 
 		return false;
 	}

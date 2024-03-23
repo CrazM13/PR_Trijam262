@@ -1,17 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://btjd3hjch08in"]
+[gd_scene load_steps=4 format=3 uid="uid://btjd3hjch08in"]
 
-[ext_resource type="Texture2D" uid="uid://deq5gwqk5h6rb" path="res://icon.svg" id="1_rj3e3"]
+[ext_resource type="Texture2D" uid="uid://btc6iapg1ihud" path="res://Assets/Explosion 1.png" id="1_woi78"]
+[ext_resource type="Texture2D" uid="uid://dd61y0il6ag72" path="res://Assets/Explosion 2.png" id="2_8kry4"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_rukcg"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_rj3e3")
+"texture": ExtResource("1_woi78")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_8kry4")
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
+"speed": 10.0
 }]
 
 [node name="Explosion" type="AnimatedSprite2D"]
 sprite_frames = SubResource("SpriteFrames_rukcg")
+autoplay = "default"
+frame_progress = 0.865525
